@@ -1,58 +1,291 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# NewsApp - Laravel News Portal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Welcome to NewsApp! This is a modern news portal built with Laravel, Inertia.js (Vue 3), and Tailwind CSS. It features secure data encryption with CipherSweet, role-based access control with Spatie Permission, and a smooth user experience.
 
-## About Laravel
+This guide will help you get the project up and running on your local machine, even if you are just starting with Laravel development.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠 Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before you begin, ensure you have the following installed on your system:
 
-## Learning Laravel
+*   **PHP (8.4.16 or higher)**
+*   **Composer (2.4.1 or higher)** (PHP dependency manager)
+*   **Node.js (v20.19.0 or higher)**
+*   **NPM (10.8.2 or higher)** (for frontend assets)
+*   **MySQL or MariaDB** (database)
+*   **Git** (optional, for cloning)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Installation Steps
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Follow these steps one by one to set up the project.
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Clone or Download the Project
+If you have Git installed, run:
 ```bash
-composer require laravel/boost --dev
+git clone <repository-url>
+cd news_app
+```
+Otherwise, download the ZIP file and extract it to your local server folder (e.g., `C:\laragon\www\news_app`).
 
-php artisan boost:install
+### 2. Install PHP Dependencies
+Open your terminal in the project root and run:
+```bash
+composer install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Install Frontend Dependencies
+Run the following command to install all necessary JavaScript packages:
+```bash
+npm install
+```
 
-## Contributing
+### 4. Setup Environment Configuration
+Copy the `.env.example` file to create your own `.env` file:
+```bash
+cp .env.example .env
+```
+*(On Windows PowerShell: `copy .env.example .env`)*
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Open the `.env` file in a text editor and update your database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=news_app
+DB_USERNAME=root
+DB_PASSWORD=
+```
+*Make sure you have created an empty database named `news_app` in your MySQL server.*
 
-## Code of Conduct
+### 5. Generate Application Key
+Run this command to generate a unique key for your application:
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Setup CipherSweet Encryption Key
+This project uses CipherSweet to encrypt sensitive user data (like emails). You need to generate a key for it:
+```bash
+php artisan ciphersweet:generate-key
+```
+Copy the generated key and paste it into your `.env` file:
+```env
+CIPHERSWEET_KEY=your_generated_key_here
+```
 
-## Security Vulnerabilities
+### 7. Run Database Migrations & Seeding
+This command will create all the necessary tables and fill them with sample data (users, roles, and posts):
+```bash
+php artisan migrate:fresh --seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 8. Link Storage
+To make images visible on the website, you need to create a symbolic link from the storage folder to the public folder:
+```bash
+php artisan storage:link
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🏃 Running the Application
+
+To see the website in your browser, you need to have two processes running in your terminal:
+
+1.  **Start the PHP Server:**
+    ```bash
+    php artisan serve
+    ```
+    This will start the app at `http://127.0.0.1:8000`.
+
+2.  **Start Vite (for Frontend):**
+    Open a *new* terminal window in the same project folder and run:
+    ```bash
+    npm run dev
+    ```
+
+Now, open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser!
+
+---
+
+## 🔐 Default User Credentials
+
+After seeding the database, you can use these accounts to test different roles:
+
+### Admin User (Full Access)
+*   **Email:** `admin@example.com`
+*   **Password:** `password`
+
+### Author User (Can create/edit posts)
+*   **Email:** `author@example.com`
+*   **Password:** `password`
+
+---
+
+## 📂 Project Structure Overview
+
+*   `app/Models`: Database models with column constants for better maintainability.
+*   `app/Services`: Business logic separated from controllers.
+*   `app/Repositories`: Database query logic.
+*   `resources/js/Pages`: Frontend views built with Vue 3 and Inertia.js.
+*   `lang/lt`: Lithuanian translations for the application.
+
+---
+
+## 📝 Common Commands
+
+*   `php artisan migrate:fresh --seed` - Resets database and reloads sample data.
+*   `npm run build` - Builds the frontend for production.
+*   `php artisan route:list` - See all available web routes.
+
+Happy Coding! 🚀
+
+---
+
+# NewsApp - „Laravel“ Naujienų Portalas
+
+Sveiki atvykę į „NewsApp“! Tai modernus naujienų portalas, sukurtas naudojant „Laravel“, „Inertia.js“ („Vue 3“) ir „Tailwind CSS“. Jame įdiegtas saugus duomenų šifravimas su „CipherSweet“, vaidmenimis pagrįsta prieigos kontrolė („Spatie Permission“) ir sklandi vartotojo patirtis.
+
+Šis gidas padės jums įdiegti ir paleisti projektą savo vietinėje mašinoje, net jei tik pradedate dirbti su „Laravel“.
+
+---
+
+## 🛠 Reikalavimai
+
+Prieš pradedant įsitikinkite, kad jūsų sistemoje įdiegta:
+
+*   **PHP (8.4.16 arba naujesnė)**
+*   **Composer (2.4.1 arba naujesnė)** (PHP priklausomybių valdiklis)
+*   **Node.js (v20.19.0 arba naujesnė)**
+*   **NPM (10.8.2 arba naujesnė)** (frontend turtui)
+*   **MySQL arba MariaDB** (duomenų bazė)
+*   **Git** (nebūtina, klonavimui)
+
+---
+
+## 🚀 Diegimo žingsniai
+
+Atlikite šiuos veiksmus iš eilės, kad paruoštumėte projektą.
+
+### 1. Klonuokite arba atsisiųskite projektą
+Jei turite įdiegtą „Git“, paleiskite:
+```bash
+git clone <repository-url>
+cd news_app
+```
+Kitu atveju atsisiųskite ZIP failą ir išpakuokite jį į savo vietinio serverio aplanką (pvz., `C:\laragon\www\news_app`).
+
+### 2. Įdiekite PHP priklausomybes
+Atidarykite terminalą projekto aplanke ir paleiskite:
+```bash
+composer install
+```
+
+### 3. Įdiekite Frontend priklausomybes
+Paleiskite šią komandą, kad įdiegtumėte visus reikiamus „JavaScript“ paketus:
+```bash
+npm install
+```
+
+### 4. Aplinkos konfigūracijos nustatymas
+Nukopijuokite `.env.example` failą ir sukurkite savo `.env` failą:
+```bash
+cp .env.example .env
+```
+*(„Windows PowerShell“ aplinkoje: `copy .env.example .env`)*
+
+Atidarykite `.env` failą tekstų redaktoriumi ir atnaujinkite duomenų bazės prisijungimus:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=news_app
+DB_USERNAME=root
+DB_PASSWORD=
+```
+*Įsitikinkite, kad savo „MySQL“ serveryje sukūrėte tuščią duomenų bazę pavadinimu `news_app`.*
+
+### 5. Sugeneruokite programos raktą
+Paleiskite šią komandą, kad sugeneruotumėte unikalų raktą savo programai:
+```bash
+php artisan key:generate
+```
+
+### 6. „CipherSweet“ šifravimo rakto nustatymas
+Šis projektas naudoja „CipherSweet“, kad užšifruotų jautrius vartotojo duomenis (pvz., el. paštą). Tam reikia sugeneruoti raktą:
+```bash
+php artisan ciphersweet:generate-key
+```
+Nukopijuokite sugeneruotą raktą ir įklijuokite jį į savo `.env` failą:
+```env
+CIPHERSWEET_KEY=jusu_sugeneruotas_raktas_cia
+```
+
+### 7. Duomenų bazės migracijų ir pradinių duomenų vykdymas
+Ši komanda sukurs visas reikiamas lenteles ir užpildys jas pavyzdiniais duomenimis (vartotojais, vaidmenimis ir įrašais):
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 8. Saugyklos susiejimas (Storage Link)
+Kad nuotraukos būtų matomos svetainėje, turite sukurti simbolinę nuorodą iš „storage“ aplanko į „public“ aplanką:
+```bash
+php artisan storage:link
+```
+
+---
+
+## 🏃 Programos paleidimas
+
+Norėdami pamatyti svetainę savo naršyklėje, terminale turi veikti du procesai:
+
+1.  **Paleiskite PHP serverį:**
+    ```bash
+    php artisan serve
+    ```
+    Tai paleis programą adresu `http://127.0.0.1:8000`.
+
+2.  **Paleiskite „Vite“ (Frontend daliai):**
+    Atidarykite *naują* terminalo langą tame pačiame projekto aplanke ir paleiskite:
+    ```bash
+    npm run dev
+    ```
+
+Dabar naršyklėje atidarykite [http://127.0.0.1:8000](http://127.0.0.1:8000)!
+
+---
+
+## 🔐 Numatytieji vartotojo duomenys
+
+Užpildę duomenų bazę, galite naudoti šias paskyras skirtingiems vaidmenims išbandyti:
+
+### Administratorius (Pilna prieiga)
+*   **El. paštas:** `admin@example.com`
+*   **Slaptažodis:** `password`
+
+### Autorius (Gali kurti/redaguoti įrašus)
+*   **El. paštas:** `author@example.com`
+*   **Slaptažodis:** `password`
+
+---
+
+## 📂 Projekto struktūros apžvalga
+
+*   `app/Models`: Duomenų bazės modeliai su stulpelių konstantomis geresniam palaikymui.
+*   `app/Services`: Verslo logika, atskirta nuo valdiklių (controllers).
+*   `app/Repositories`: Duomenų bazės užklausų logika.
+*   `resources/js/Pages`: Frontend vaizdai, sukurti naudojant „Vue 3“ ir „Inertia.js“.
+*   `lang/lt`: Lietuviški vertimai programai.
+
+---
+
+## 📝 Dažnos komandos
+
+*   `php artisan migrate:fresh --seed` - Ištrina duomenų bazę ir įkelia pavyzdinius duomenis iš naujo.
+*   `npm run build` - Paruošia frontend dalį gamybinei (production) aplinkai.
+*   `php artisan route:list` - Peržiūrėti visus galimus svetainės kelius (routes).
+
+Sėkmingo kodavimo! 🚀

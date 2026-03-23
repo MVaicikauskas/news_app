@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -17,14 +16,22 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
+            User::COL_NAME => ['required', 'string', 'max:255'],
+            User::COL_EMAIL => [
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                function ($attribute, $value, $fail) {
+                    $user = User::whereBlind(User::COL_EMAIL, 'email_index', $value)
+                        ->where(User::COL_ID, '!=', $this->user()->{User::COL_ID})
+                        ->first();
+
+                    if ($user) {
+                        $fail(trans('validation.unique', ['attribute' => 'email']));
+                    }
+                },
             ],
         ];
     }
