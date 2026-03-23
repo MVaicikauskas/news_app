@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -18,6 +19,7 @@ class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
+     * @return Response
      */
     public function create(): Response
     {
@@ -26,22 +28,37 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
+     * @param Request $request
+     * @return RedirectResponse
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            User::COL_NAME => 'required|string|max:255',
+            User::COL_EMAIL => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (User::whereBlind(User::COL_EMAIL, 'email_index', $value)->exists()) {
+                        $fail(trans('validation.unique', ['attribute' => 'email']));
+                    }
+                },
+            ],
+            User::COL_PASSWORD => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            User::COL_NAME => $request->{User::COL_NAME},
+            User::COL_EMAIL => $request->{User::COL_EMAIL},
+            User::COL_PASSWORD => Hash::make($request->{User::COL_PASSWORD}),
+            User::COL_IS_VERIFIED_BY_ADMIN => false,
         ]);
+
+        $user->assignRole(UserRole::AUTHOR->value);
 
         event(new Registered($user));
 

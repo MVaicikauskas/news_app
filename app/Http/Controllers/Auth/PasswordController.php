@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,11 +18,11 @@ class PasswordController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            User::COL_PASSWORD => ['required', Password::defaults(), 'confirmed'],
         ]);
 
         $request->user()->update([
-            'password' => Hash::make($validated['password']),
+            User::COL_PASSWORD => Hash::make($validated[User::COL_PASSWORD]),
         ]);
 
         return back();

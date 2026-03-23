@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +19,8 @@ class NewPasswordController extends Controller
 {
     /**
      * Display the password reset view.
+     * @param Request $request
+     * @return Response
      */
     public function create(Request $request): Response
     {
@@ -29,7 +32,8 @@ class NewPasswordController extends Controller
 
     /**
      * Handle an incoming new password request.
-     *
+     * @param Request $request
+     * @return RedirectResponse
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
@@ -47,8 +51,8 @@ class NewPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
+                    User::COL_PASSWORD => Hash::make($request->password),
+                    User::COL_REMEMBER_TOKEN => Str::random(60),
                 ])->save();
 
                 event(new PasswordReset($user));

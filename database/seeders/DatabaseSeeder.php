@@ -3,23 +3,41 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            RoleAndPermissionSeeder::class,
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $admin = User::create([
+            User::COL_NAME => 'Admin User',
+            User::COL_EMAIL => 'admin@example.com',
+            User::COL_PASSWORD => bcrypt('password'),
+            User::COL_EMAIL_VERIFIED_AT => now(),
+            User::COL_IS_VERIFIED_BY_ADMIN => true,
+            User::COL_ADMIN_VERIFIED_AT => now(),
+        ]);
+        $admin->assignRole(\App\Enums\UserRole::ADMIN->value);
+
+        $author = User::create([
+            User::COL_NAME => 'Author User',
+            User::COL_EMAIL => 'author@example.com',
+            User::COL_PASSWORD => bcrypt('password'),
+            User::COL_EMAIL_VERIFIED_AT => now(),
+            User::COL_IS_VERIFIED_BY_ADMIN => true,
+            User::COL_ADMIN_VERIFIED_AT => now(),
+        ]);
+        $author->assignRole(\App\Enums\UserRole::AUTHOR->value);
+
+        $this->call([
+            PostSeeder::class,
         ]);
     }
 }
