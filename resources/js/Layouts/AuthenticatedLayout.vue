@@ -37,12 +37,25 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    Dashboard
+                                    Valdymo skydas
+                                </NavLink>
+                                <NavLink
+                                    :href="route('posts.index')"
+                                    :active="route().current('posts.*')"
+                                >
+                                    Įrašai
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user && $page.props.roles.includes('admin')"
+                                    :href="route('admin.verify-authors.index')"
+                                    :active="route().current('admin.verify-authors.*')"
+                                >
+                                    Autorių patvirtinimas
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div v-if="$page.props.auth.user" class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -74,18 +87,34 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
-                                            Profile
+                                            Profilis
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            Atsijungti
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
+                        </div>
+
+                        <div v-else class="hidden sm:ms-6 sm:flex sm:items-center space-x-4">
+                            <Link
+                                :href="route('login')"
+                                class="text-sm text-gray-700 underline dark:text-gray-500"
+                            >
+                                Prisijungti
+                            </Link>
+
+                            <Link
+                                :href="route('register')"
+                                class="ms-4 text-sm text-gray-700 underline dark:text-gray-500"
+                            >
+                                Registruotis
+                            </Link>
                         </div>
 
                         <!-- Hamburger -->
@@ -144,12 +173,19 @@ const showingNavigationDropdown = ref(false);
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
-                            Dashboard
+                            Valdymo skydas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('posts.index')"
+                            :active="route().current('posts.*')"
+                        >
+                            Įrašai
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div
+                        v-if="$page.props.auth.user"
                         class="border-t border-gray-200 pb-1 pt-4"
                     >
                         <div class="px-4">
@@ -165,16 +201,25 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
+                                Profilis
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
+                                class="w-full text-start"
                             >
-                                Log Out
+                                Atsijungti
                             </ResponsiveNavLink>
                         </div>
+                    </div>
+                    <div v-else class="border-t border-gray-200 pb-1 pt-4 space-y-1">
+                        <ResponsiveNavLink :href="route('login')">
+                            Prisijungti
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('register')">
+                            Registruotis
+                        </ResponsiveNavLink>
                     </div>
                 </div>
             </nav>

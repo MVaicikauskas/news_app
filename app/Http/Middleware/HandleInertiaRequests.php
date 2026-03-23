@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -39,6 +42,13 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+            ],
+            'can' => [
+                'create_post' => $request->user() ? ($request->user()->can('create', Post::class) && (!$request->user()->hasRole(UserRole::AUTHOR->value) || $request->user()->{User::COL_IS_VERIFIED_BY_ADMIN})) : false,
+            ],
+            'roles' => $request->user() ? $request->user()->getRoleNames() : [],
         ];
     }
 }
