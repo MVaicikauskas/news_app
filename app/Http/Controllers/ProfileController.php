@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,8 +15,21 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    protected UserServiceInterface $userService;
+
+    /**
+     * ProfileController constructor.
+     * @param UserServiceInterface $userService
+     */
+    public function __construct(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display the user's profile form.
+     * @param Request $request
+     * @return Response
      */
     public function edit(Request $request): Response
     {
@@ -26,22 +41,20 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
+     * @param ProfileUpdateRequest $request
+     * @return RedirectResponse
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
+        $this->userService->updateProfile($request->user(), $request->validated());
 
         return Redirect::route('profile.edit');
     }
 
     /**
      * Delete the user's account.
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -53,7 +66,7 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        $this->userService->deleteAccount($user);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
