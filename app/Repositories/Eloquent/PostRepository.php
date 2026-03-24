@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Enums\PostRelation;
 use App\Enums\VoteType;
 use App\Models\Post;
 use App\Models\Vote;
@@ -29,7 +30,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
      */
     public function getAllPaginated(int $perPage = 10, ?int $userId = null, bool $trashed = false): LengthAwarePaginator
     {
-        $query = $this->model->with([Post::REL_AUTHOR, Post::REL_MEDIA]);
+        $query = $this->model->with([PostRelation::REL_AUTHOR->value, PostRelation::REL_MEDIA->value]);
 
         if ($trashed) {
             $query->onlyTrashed();
@@ -62,7 +63,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
      */
     public function find(int $id, bool $withTrashed = false): ?Model
     {
-        $query = $this->model->with([Post::REL_AUTHOR, Post::REL_MEDIA]);
+        $query = $this->model->with([PostRelation::REL_AUTHOR->value, PostRelation::REL_MEDIA->value]);
 
         if ($withTrashed) {
             $query->withTrashed();
@@ -89,7 +90,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
      */
     public function findBySlug(string $slug): ?Post
     {
-        return $this->model->with([Post::REL_AUTHOR, Post::REL_MEDIA])->where(Post::COL_SLUG, $slug)->first();
+        return $this->model->with([PostRelation::REL_AUTHOR->value, PostRelation::REL_MEDIA->value])->where(Post::COL_SLUG, $slug)->first();
     }
 
     /**

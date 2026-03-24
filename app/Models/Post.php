@@ -28,10 +28,6 @@ class Post extends Model implements HasMedia
     const string COL_UPDATED_AT = 'updated_at';
     const string COL_DELETED_AT = 'deleted_at';
 
-    const string REL_AUTHOR = 'author';
-    const string REL_VOTES = 'votes';
-    const string REL_MEDIA = 'media';
-
     const string MEDIA_COLLECTION_IMAGES = 'images';
 
     public function author(): BelongsTo

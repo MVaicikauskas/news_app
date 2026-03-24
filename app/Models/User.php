@@ -32,9 +32,6 @@ class User extends Authenticatable implements MustVerifyEmail, CipherSweetEncryp
     const string COL_CREATED_AT = 'created_at';
     const string COL_UPDATED_AT = 'updated_at';
 
-    const string REL_POSTS = 'posts';
-    const string REL_VOTES = 'votes';
-
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles, UsesCipherSweet;
 

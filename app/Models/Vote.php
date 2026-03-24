@@ -17,9 +17,6 @@ class Vote extends Model
     const string COL_CREATED_AT = 'created_at';
     const string COL_UPDATED_AT = 'updated_at';
 
-    const string REL_USER = 'user';
-    const string REL_POST = 'post';
-
     protected $fillable = [self::COL_USER_ID, self::COL_POST_ID, self::COL_TYPE, self::COL_IP_ADDRESS, self::COL_USER_AGENT];
 
     protected $casts = [

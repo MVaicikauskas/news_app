@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\PostRelation;
+use App\Enums\VoteType;
 use App\Models\Post;
+use App\Models\User;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use App\Services\Interfaces\PostServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Str;
 
 class PostService implements PostServiceInterface
 {
@@ -60,11 +62,11 @@ class PostService implements PostServiceInterface
     /**
      * Create a new post.
      * @param array $data
-     * @param \App\Models\User|null $user
+     * @param User|null $user
      * @param \Illuminate\Http\UploadedFile|null $image
      * @return Post
      */
-    public function createPost(array $data, ?\App\Models\User $user = null, ?\Illuminate\Http\UploadedFile $image = null): Post
+    public function createPost(array $data, ?User $user = null, ?\Illuminate\Http\UploadedFile $image = null): Post
     {
         if ($user) {
             $data[Post::COL_USER_ID] = $user->{User::COL_ID};
@@ -115,19 +117,19 @@ class PostService implements PostServiceInterface
      */
     public function getPost(Post $post): Post
     {
-        return $post->load([Post::REL_AUTHOR, Post::REL_MEDIA])->append(['likes_count', 'dislikes_count']);
+        return $post->load([PostRelation::REL_AUTHOR->value, PostRelation::REL_MEDIA->value])->append(['likes_count', 'dislikes_count']);
     }
 
     /**
      * Vote for a post.
      * @param Post $post
      * @param int|null $userId
-     * @param \App\Enums\VoteType $type
+     * @param VoteType $type
      * @param string|null $ipAddress
      * @param string|null $userAgent
      * @return void
      */
-    public function votePost(Post $post, ?int $userId, \App\Enums\VoteType $type, ?string $ipAddress = null, ?string $userAgent = null): void
+    public function votePost(Post $post, ?int $userId, VoteType $type, ?string $ipAddress = null, ?string $userAgent = null): void
     {
         $this->repository->vote($post, $userId, $type, $ipAddress, $userAgent);
     }

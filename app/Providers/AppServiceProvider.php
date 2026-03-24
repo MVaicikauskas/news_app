@@ -6,6 +6,8 @@ use App\Enums\UserRole;
 use App\Models\User;
 use App\Models\Post;
 use App\Notifications\NewAuthorRegisteredNotification;
+use App\Observers\PostObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
@@ -43,8 +45,8 @@ class AppServiceProvider extends ServiceProvider
                 : $rule;
         });
 
-        Post::observe(\App\Observers\PostObserver::class);
-        User::observe(\App\Observers\UserObserver::class);
+        Post::observe(PostObserver::class);
+        User::observe(UserObserver::class);
 
         Event::listen(
             Verified::class,

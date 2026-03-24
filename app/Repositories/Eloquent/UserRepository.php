@@ -25,7 +25,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getAuthorsForVerification(): Collection
     {
         return User::role(UserRole::AUTHOR->value)
-            ->with('roles')
+            ->with(UserRole::ROLES->value)
             ->whereNotNull(User::COL_EMAIL_VERIFIED_AT)
             ->orderBy(User::COL_IS_VERIFIED_BY_ADMIN, 'asc')
             ->orderBy(User::COL_CREATED_AT, 'desc')

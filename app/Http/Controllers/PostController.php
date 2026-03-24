@@ -25,7 +25,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the posts.
      * @param Request $request
      * @return Response
      */
@@ -47,7 +47,7 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new post.
      * @return Response
      */
     public function create(): Response
@@ -56,7 +56,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created post in DB.
      * @param PostRequest $request
      * @return RedirectResponse
      */
@@ -69,7 +69,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the post.
      * @param Request $request
      * @param Post $post
      * @return Response
@@ -88,7 +88,7 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the post.
      * @param Post $post
      * @return Response
      */
@@ -102,7 +102,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the post in DB.
      * @param PostRequest $request
      * @param Post $post
      * @return RedirectResponse
@@ -118,7 +118,7 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the post from DB.
      * @param Post $post
      * @return RedirectResponse
      */
@@ -133,7 +133,7 @@ class PostController extends Controller
     }
 
     /**
-     * Restore the specified resource from storage.
+     * Restore the post from DB.
      * @param int $id
      * @return RedirectResponse
      */
@@ -149,7 +149,7 @@ class PostController extends Controller
     }
 
     /**
-     * Permanently remove the specified resource from storage.
+     * Permanently remove the post from DB.
      * @param int $id
      * @return RedirectResponse
      */
